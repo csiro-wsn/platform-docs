@@ -1,4 +1,4 @@
-site_name: CSSE4011
+site_name: platform-docs
 nav:
     - Home: index.md
     - Getting Started: getting_started.md
