@@ -58,27 +58,23 @@
     <a class="current" href="./">Getting Started</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#4011-repository-setup-guide">4011 Repository Setup Guide</a></li>
+    <li class="toctree-l2"><a href="#csirocsse4011-open-repository-setup-guide">CSIRO/CSSE4011 open repository setup guide</a></li>
     
         <ul>
         
-            <li><a class="toctree-l3" href="#pre-requirements">Pre-Requirements</a></li>
+            <li><a class="toctree-l3" href="#hardware">Hardware</a></li>
+        
+            <li><a class="toctree-l3" href="#software-installation">Software Installation:</a></li>
         
             <li><a class="toctree-l3" href="#gcc-arm-none-eabi">gcc-arm-none-eabi</a></li>
         
             <li><a class="toctree-l3" href="#installing-segger-jlink">Installing Segger JLink</a></li>
         
-            <li><a class="toctree-l3" href="#requirements">Requirements:</a></li>
-        
-            <li><a class="toctree-l3" href="#generate-ssh-key">Generate SSH Key</a></li>
+            <li><a class="toctree-l3" href="#repository-setup">Repository Setup</a></li>
         
             <li><a class="toctree-l3" href="#setup-the-repository">Setup the Repository</a></li>
         
-            <li><a class="toctree-l3" href="#set-up-environment-variables">Set up environment variables</a></li>
-        
             <li><a class="toctree-l3" href="#compile-and-flash-an-app">Compile and flash an app:</a></li>
-        
-            <li><a class="toctree-l3" href="#running-the-app-unifiedbase">running the app: unifiedbase</a></li>
         
         </ul>
     
@@ -118,102 +114,84 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="4011-repository-setup-guide">4011 Repository Setup Guide</h1>
-<h2 id="pre-requirements">Pre-Requirements</h2>
+                <h1 id="csirocsse4011-open-repository-setup-guide">CSIRO/CSSE4011 open repository setup guide</h1>
+<h2 id="hardware">Hardware</h2>
 <ul>
-<li>Fresh install of Ubuntu in VirtualBox</li>
-<li>VirtualBox Guest Editons for screen scaling/bidirectional copying</li>
-<li>VScode</li>
-<li>git<ul>
-<li>sudo apt install git</li>
+<li>JLink Debugger/Programmer e.g. JLink EDU Mini</li>
+<li>nrf52840 particle argon/xenon</li>
+<li>other boards may be supported, i.e nrf52840dk, boards that are supported are listed in ei_freertos/core_csiro/platform</li>
+</ul>
+<h2 id="software-installation">Software Installation:</h2>
+<p>The repo may be setup for Linux, OSX, or WSL, this guide will be using Linux. It is not recommended to use a virtual machine due to extended compilation times.</p>
+<ul>
+<li>VScode<ul>
+<li>https://code.visualstudio.com/Download<br />
+$ cd ~/Downloads<br />
+$ sudo dpkg -i code_1.26.0-1534177765_amd64.deb</li>
 </ul>
 </li>
-<li>vim<ul>
-<li>sudo apt install vim</li>
-</ul>
-</li>
-<li>Ports fed through to virtual<ul>
-<li>Devices - Segger JLink</li>
+<li>git<br />
+    $ sudo apt install git</li>
+<li>Python 3.7<ul>
+<li>should be installed by default on ubuntu</li>
+<li>make sure python3 --version points to python3.7, you may need to add/alter a symlink</li>
+<li>install Python headers and static libraries <br />
+    $ sudo apt-get install python3.7-dev</li>
+<li>install pip3<br />
+    $ sudo apt install python3-pip  </li>
 </ul>
 </li>
 </ul>
 <h2 id="gcc-arm-none-eabi">gcc-arm-none-eabi</h2>
-<ul>
-<li>
-<p>How to Install arm-none-eabi-gcc for Linux</p>
-<ul>
-<li>sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa</li>
-<li>sudo apt-get update</li>
-<li>sudo apt-get install gcc-arm-embedded</li>
-</ul>
-</li>
-<li>
-<p>How to Install arm-none-eabi-gcc for OSX</p>
-<ul>
-<li>brew tap ArmMbed/homebrew-formulae</li>
-<li>brew install arm-none-eabi-gcc</li>
-</ul>
-</li>
-</ul>
+<pre><code>$ sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa  
+$ sudo apt-get update  
+$ sudo apt-get install gcc-arm-embedded
+</code></pre>
 <h2 id="installing-segger-jlink">Installing Segger JLink</h2>
-<ul>
-<li>download from https://www.segger.com/downloads/jlink/</li>
-<li>J-Link Software and Documentation pack for Linux, DEB installer, 64-bit
-sudo dpkg -i ~/Downloads/jlink_5.2.7_x86_64.deb</li>
-</ul>
-<h2 id="requirements">Requirements:</h2>
-<ol>
-<li>git installation</li>
-<li>python 3.7</li>
-<li>Linux/MAC OS</li>
-<li>JLink Debugger/Programmer e.g. JLink EDU Mini</li>
-<li>JLink Software and Drivers i.e. JLinkExe, JLinkRTT, etc</li>
-<li>ARM GCC compiler - i.e. gcc-arm-none-eabi-8-2018-q4-major</li>
-</ol>
-<h2 id="generate-ssh-key">Generate SSH Key</h2>
-<ul>
-<li>ssh-keygen -t rsa -C "example@example@uqconnect.edu.au"</li>
-<li>ssh-add</li>
-<li>then copy the key from id_rsa.pub to your github account</li>
-</ul>
-<h2 id="setup-the-repository">Setup the Repository</h2>
-<ol>
-<li>git clone https://github.com/JordanYates/freertos_open.git</li>
-<li>run the repo_setup.sh script</li>
-</ol>
-<h2 id="set-up-environment-variables">Set up environment variables</h2>
-<h3 id="linux">Linux</h3>
+<pre><code>- download from https://www.segger.com/downloads/jlink/
+- J-Link Software and Documentation pack for Linux, DEB installer, 64-bit  
+$ sudo dpkg -i ~/Downloads/jlink_5.2.7_x86_64.deb
+</code></pre>
+<h2 id="repository-setup">Repository Setup</h2>
+<h3 id="generate-ssh-key">Generate SSH Key</h3>
+<p>$ ssh-keygen -t rsa -C "example@example@uqconnect.edu.au"<br />
+$ ssh-add<br />
+then copy the key from id_rsa.pub to your github account</p>
+<h3 id="set-up-environment-variables">Set up environment variables</h3>
 <p>add the following lines to ~/.bashrc </p>
 <ul>
-<li>export PATH=<repo path>/pacp-tools/tools:$PATH</li>
-<li>export PATH=<repo path>/pacp-tools/pyclasses:$PATH</li>
-<li>export PATH=<repo path>/pacp-freertos/tools:$PATH</li>
-<li>export PYTHONPATH=<repo path>/pacp-tools/pyclasses:$PYTHONPATH</li>
-<li>export PYTHONPATH=<repo path>/pacp-freertos/ pyclasses:$PYTHONPATH</li>
+<li>export PATH=&lt;ei-freertos-path>/tools:$PATH</li>
+<li>export PYTHONPATH=&lt;ei-freertos-path>/pyclasses:$PYTHONPATH</li>
 </ul>
-<p>run source ~/.bashrc</p>
+<p>$ source ~/.bashrc</p>
+<h2 id="setup-the-repository">Setup the Repository</h2>
+<pre><code>$ git clone https://github.com/csiro-wsn/ei-freertos.git  
+$ ./repo_setup.sh
+</code></pre>
 <h2 id="compile-and-flash-an-app">Compile and flash an app:</h2>
-<h3 id="compiling-the-app-unifiedbase">compiling the app unifiedbase:</h3>
-<pre><code>cd unifiedbase
-make TARGET=argon tdf - this needs to be done once
-make TARGET=argon debug - to compile
+<h3 id="compiling-the-app-low_power">compiling the app low_power:</h3>
+<pre><code>$ cd apps/low_power  
+$ make TARGET=argon debug -j
 </code></pre>
 <h3 id="flashing-an-app">flashing an app</h3>
-<p>connect your jlink EDU mini<br />
-    make TARGET=argon flashdbg -j </p>
+<p>connect your jlink EDU mini  </p>
+<h4 id="verifying-jlink">verifying JLink</h4>
+<pre><code>verify it is plugged in correctly and recognises the device
+$ JLinkExe
+    &gt; connect
+    &gt; S
+    &gt; &lt;Enter&gt;
+If a Target device selection comes up, select nrf52840_xxAA, by nordic semiconductors, Cortex-M4 on subsequent connects it will be the default device
+</code></pre>
+<h3 id="flashing-the-app">flashing the app</h3>
+<pre><code>$ make TARGET=argon flashdbg -j   
+blue LED should start blinking
+</code></pre>
 <h3 id="tips">tips:</h3>
-<pre><code>- make TARGET=argon help - generates help message
-- make TARGET=argon jlinksn - get serial numbers of devices connected - useful for multiple devices connected
-- make TARGET=argon JLINK=&lt;serial number&gt; - needed when multiple devices connected to computer or it will give you error, alternatively just take one out
+<pre><code>$ make TARGET=argon help - generates help message  
+$ make TARGET=argon jlinksn - get serial numbers of devices connected - useful for multiple devices connected  
+$ make TARGET=argon JLINK=&lt;serial number&gt; - needed when multiple devices connected to computer or it will give you error, alternatively just take one out
 </code></pre>
-<h2 id="running-the-app-unifiedbase">running the app: unifiedbase</h2>
-<p>to display any meaningful output we must run baselisten, an app that listens for incoming BLE packets </p>
-<pre><code>- cd pacp-tools
-- ./baselisten --serial /dev/ttyACM0
-</code></pre>
-<p>you can determine the serial device by typing 
-    - ls /dev/tty*
-which will display all the serial devices     </p>
               
             </div>
           </div>
